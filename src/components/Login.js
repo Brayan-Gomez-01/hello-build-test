@@ -98,12 +98,6 @@ const Login = () => {
                 </Form.Item>
                 {error != false ? <Alert message={error} type="error" className="mb-2" />:""}
                 <Form.Item>
-                  <a className="login-form-forgot" href="">
-                    Forgot password
-                  </a>
-                </Form.Item>
-
-                <Form.Item>
                   <Button
                     type="primary"
                     htmlType="submit"
