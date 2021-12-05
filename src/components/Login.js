@@ -1,7 +1,11 @@
+import React, { useState } from "react";
+import { post } from '../libs/AsyncHttpRequest';
+import { URL_API } from '../config/constants';
 import "../styles/login/login.css";
+import { Link } from "react-router-dom";
 import { Layout } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, Row, Col, Alert } from "antd";
 // import Loading from "./Loading";
 import Header from "./Header";
 import Navbar from "./Navbar";
@@ -9,9 +13,38 @@ import Copyrigth from "./Copyrigth";
 const { Content } = Layout;
 
 const Login = () => {
+  const [username, setUsername] = useState(false);
+  const [password, setPassword] = useState(false);
+  const [error, setError] = useState(false)
+
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
+  const getPassword = (event)=>{
+  setPassword(event.target.value);
+  }
+  const getUsername = (event)=>{
+  setUsername(event.target.value);
+  }
+  const validateUserInfo = async (event) => {
+  if(username && password){
+    const {data}  = await post(`${URL_API}/user/login`,{
+      "username":username,
+      "password":password
+    });
+    if(typeof data.result != "string"){
+      window.location.replace("/dashboard")
+      localStorage.setItem("login",true)
+      localStorage.setItem("gitlab_user",data.result.gitlab_user)
+      localStorage.setItem("username",data.result.username)
+	}else{
+    setError(data.result)
+    setTimeout(() => {
+     setError(false)
+  }, 3000)
+	}
+    }
+  }
   return (
     <Layout className="fullscreen" id="login">
       <Header title="Hello Build Login" />
@@ -44,6 +77,7 @@ const Login = () => {
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username"
+                    onChange={getUsername}
                   />
                 </Form.Item>
                 <Form.Item
@@ -59,8 +93,10 @@ const Login = () => {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password"
+                    onChange={getPassword}
                   />
                 </Form.Item>
+                {error != false ? <Alert message={error} type="error" className="mb-2" />:""}
                 <Form.Item>
                   <a className="login-form-forgot" href="">
                     Forgot password
@@ -72,10 +108,11 @@ const Login = () => {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button mr-1"
+                    onClick={validateUserInfo}
                   >
                     Log in
                   </Button>
-                  Or <a href="">register now!</a>
+                  Or <Link to="/register">register now! </Link>
                 </Form.Item>
               </Form>{" "}
             </Content>
