@@ -20,7 +20,7 @@ export const Dashboard = ()=>{
 	const [repositories, setRepositories] = useState([]);
 	const [favoriteRepositories, setFavoriteRepositories] = useState([]);
 	const [gitHubUser, setGitHubUser] = useState(localStorage.getItem("github_user") || "");
-	const limit = 10;
+	const limit = 100;
 	const login = localStorage.getItem("login")
 	const onSearch = (event) => {
 		setGitHubUser(event.target.value)
