@@ -4,7 +4,7 @@ import { URL_API } from '../config/constants';
 import "../styles/login/login.css";
 import { Link } from "react-router-dom";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Form, Input, Row, Col,  Layout, Alert } from "antd";
+import { Form, Input, Row, Col,  Layout, Alert, Button } from "antd";
 // import Loading from "./Loading";
 import Header from "./Header";
 import Navbar from "./Navbar";
@@ -22,6 +22,11 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 		const onFinish = (values: any) => {
 			console.log("Received values of form: ", values);
 		};
+		
+		const LogOut = ()=>{
+			localStorage.clear()
+			window.location.replace("/")
+		}  
 
 		useEffect(()=>{
 			if(login !== "true"){
@@ -42,7 +47,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 				}
 			}
 			fetchData()
-		},[login])
+		},[username])
 
 		return (
 		<Layout className="fullscreen" id="profile">
@@ -91,12 +96,12 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 					</Form.Item>
 					<Form.Item
 					>
-					Gitlab User:
+					Github User:
 						<Input
 						prefix={<UserOutlined className="site-form-item-icon" />}
-						placeholder="Gitlab User"
-						name="gitlab_user"
-						value={userInfo.gitlab_user}
+						placeholder="Github User"
+						name="github_user"
+						value={userInfo.github_user}
 						/>
 					</Form.Item>
 					<Form.Item
@@ -111,6 +116,14 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 						iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
 						/>
 					</Form.Item>
+					<Button
+					type="primary"
+					htmlType="submit"
+					className="login-form-button mr-1"
+					onClick={LogOut}
+					>
+					Log out
+					</Button>
 					</Form>{" "}
 				</Content>
 				</Col>

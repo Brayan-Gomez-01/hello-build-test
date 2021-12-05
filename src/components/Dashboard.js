@@ -19,11 +19,11 @@ export const Dashboard = ()=>{
 	const [searchList, setSearchList] = useState([]);
 	const [repositories, setRepositories] = useState([]);
 	const [favoriteRepositories, setFavoriteRepositories] = useState([]);
-	const [gitlabUser, setGitlabUser] = useState(localStorage.getItem("gitlab_user") || "");
-	const limit = 100;
+	const [gitHubUser, setGitHubUser] = useState(localStorage.getItem("github_user") || "");
+	const limit = 10;
 	const login = localStorage.getItem("login")
 	const onSearch = (event) => {
-		setGitlabUser(event.target.value)
+		setGitHubUser(event.target.value)
 	};
 	const getRepositoryByName = (event)=>{
 		const { value } = event.target
@@ -36,8 +36,8 @@ export const Dashboard = ()=>{
 	},[login])	
 	useEffect(()=>{
 			async function getRepositories() {
-				if(gitlabUser){
-				const {data}  = await get(`${URL_API}/repo/user/${gitlabUser}/limit/${limit}`);
+				if(gitHubUser){
+				const {data}  = await get(`${URL_API}/repo/user/${gitHubUser}/limit/${limit}`);
 				if(data.errors){
 					setError(data.errors[0].message)
 					setRepositories([])
@@ -49,14 +49,14 @@ export const Dashboard = ()=>{
 			}
 			}
 			getRepositories()
-		},[gitlabUser])
+		},[gitHubUser])
 
 	const likeRepository = (name)=>{
 		let indexCard = name.target.getAttribute("index")
 		repositories.map((items, index) => {
 			if(items.databaseId == indexCard){
 				favoriteRepositoriesList.push(
-				<Card  title={items.name} bordered={false} className="mb-5 mt-1" >
+				<Card  title={items.name} bordered={false} className="mb-5 mt-1"  >
 					<p>repository Url: <a href={items.url} target="_blank">{items.url}</a></p>
 					{items.languages.nodes.length != 0 ? <p>Languages</p>:""}
 					{items.languages.nodes.map((item,index)=>{
@@ -70,7 +70,7 @@ export const Dashboard = ()=>{
 
 		for(const [index, repository] of repositories.entries() ) {
 			repositoriesList.push(
-			<Card  title={repository.name} bordered={false} index={repository.databaseId}  className="mb-5 mt-1" extra={<button type="button" className="btn btn-primary" onClick={likeRepository}  index={repository.databaseId}>check as favorite</button>}>
+			<Card  title={repository.name} bordered={false} index={repository.databaseId}  className="mb-5 mt-1" extra={<button type="button" className="btn btn-primary" onClick={likeRepository}  index={repository.databaseId}>Check Favorite</button>}>
 				<p>repository Url: <a href={repository.url} target="_blank">{repository.url}</a></p>
 				{repository.languages.nodes.length != 0 ? <p>Languages</p>:""}
 				{repository.languages.nodes.map((item,index)=>{
@@ -88,7 +88,7 @@ export const Dashboard = ()=>{
 				repositories.filter((items, index) => {
 					if(items.name.includes(search)){
 						list.push(
-						<Card  title={items.name} bordered={false} className="mb-5 mt-1"  >
+						<Card  title={items.name} bordered={false} className="mb-5 mt-1" extra={<button type="button" className="btn btn-primary" onClick={likeRepository}  index={items.databaseId}>Check Favorite</button>}>
 							<p>repository Url: <a href={items.url} target="_blank">{items.url}</a></p>
 							{items.languages.nodes.length != 0 ? <p>Languages</p>:""}
 							{items.languages.nodes.map((item,index)=>{
@@ -113,11 +113,11 @@ export const Dashboard = ()=>{
 	<div className="site-card-wrapper">
 	<div>
 	<label>
-	<p className="ml-3">Gitlab User:</p>
+	<p className="ml-3">Github User:</p>
 	<Search placeholder="Git Hub User Name" onChange={onSearch} style={{ width: 200 }} className="ml-3 mb-5"/>
 	</label>
 	</div>
-	<h3 className="float-left">Your Repositories {gitlabUser != "" ? gitlabUser:""}</h3>
+	<h3 className="float-left">Your Repositories {gitHubUser != "" ? gitHubUser:""}</h3>
 	{favoriteRepositories.length != 0 ? <h3 className="float-right mr-5">Your Favorite Repositories  </h3>: ""}
 	<Content >
 	<div>

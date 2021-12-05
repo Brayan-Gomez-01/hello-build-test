@@ -35,7 +35,7 @@ const Login = () => {
     if(typeof data.result != "string"){
       window.location.replace("/dashboard")
       localStorage.setItem("login",true)
-      localStorage.setItem("gitlab_user",data.result.gitlab_user)
+      localStorage.setItem("github_user",data.result.github_user)
       localStorage.setItem("username",data.result.username)
 	}else{
     setError(data.result)

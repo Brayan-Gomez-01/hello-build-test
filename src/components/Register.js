@@ -17,7 +17,7 @@ import Copyrigth from "./Copyrigth";
 	const [userInfo, setUserInfo] = useState({
 		"name":"",
 		"username":"",
-		"gitlab_user":"",
+		"github_user":"",
 		"password":""
 	});
 
@@ -100,14 +100,14 @@ import Copyrigth from "./Copyrigth";
 					rules={[
 					{
 						required: true,
-						message: "Please input your Gitlab User!",
+						message: "Please input your GitHub User!",
 					},
 					]}
 				>
 					<Input
 					prefix={<UserOutlined className="site-form-item-icon" />}
-					placeholder="Gitlab User"
-					name="gitlab_user"
+					placeholder="GitHub User"
+					name="github_user"
 					onChange={getInfo}
 					/>
 				</Form.Item>
